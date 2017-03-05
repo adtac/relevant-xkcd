@@ -133,5 +133,5 @@ func main() {
     http.HandleFunc("/", IndexHandler)
     http.HandleFunc("/search", SearchHandler)
 
-    http.ListenAndServe(":80", nil)
+    http.ListenAndServe(":8080", nil)
 }
