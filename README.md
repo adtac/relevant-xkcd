@@ -1,6 +1,6 @@
 # relevant-xkcd
 
-**[See here for a live run.](https://adtac.github.io/relevant-xkcd/)**
+**[See here for a live run.](https://relevant-xkcd.github.io/)**
 
 You know how the old saying goes - *"There's always a relevant XKCD comic regardless of the situation"*.
 
