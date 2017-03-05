@@ -1,8 +1,16 @@
 # relevant-xkcd
 
+**[See here for a live run.](https://adtac.github.io/relevant-xkcd/)**
+
 You know how the old saying goes - *"There's always a relevant XKCD comic regardless of the situation"*.
 
 Inspired by this: [Relevant XKCD](http://thomaspark.co/2017/01/relevant-xkcd/).
+
+### How this works
+
+The lovely folks at [ExplainXKCD](http://www.explainxkcd.com/wiki/index.php/Main_Page)
+have a detailed explanation, transcript and everything in between for every XKCD
+comic ever. Searching that is probably a good idea to get a relevant XKCD.
 
 ### Dependencies
 
