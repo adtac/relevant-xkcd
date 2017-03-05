@@ -1,0 +1,227 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+        <meta property="og:site_name" content="Relevant XKCD">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://relevant-xkcd.now.sh">
+        <meta property="og:title" content="Relevant XKCD">
+        <meta name="description" content="Search for relevant XKCD comics">
+        <meta property="og:description" content="Search for relevant XKCD comics">
+
+        <title>Relevant XKCD Search</title>
+    </head>
+
+    <style>
+    * {
+        font-family: "Roboto", sans-serif;
+        font-size: 14px;
+    }
+
+    h1 {
+        font-size: 24px;
+        width: 100%;
+        text-align: center;
+        font-weight: 300;
+    }
+
+    hr {
+        border: none;
+        height: 1px;
+        background-color: #888888;
+    }
+
+    .contentwrapper, .search, .result-header, .result-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contentwrapper {
+        width: 100%;
+    }
+
+    .content {
+        min-width: 600px;
+        max-width: 800px;
+    }
+
+    .search, .searchbar {
+        width: 100%;
+    }
+
+    .helptext {
+        width: 100%;
+        text-align: center;
+        font-weight: 300;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    input[type=text] {
+        outline: none;
+        order: 2;
+        display: block;
+        margin-top: 0;
+        background: 0 0;
+        padding: 2px 2px 1px;
+        border-width: 0 0 1px;
+        line-height: 26px;
+        height: 30px;
+        -ms-flex-preferred-size: 26px;
+        border-radius: 0;
+        border-style: solid;
+        width: 100%;
+        box-sizing: border-box;
+        float: left;
+    }
+
+    .error {
+        color: red;
+        font-weight: 900;
+        text-align: center
+        width: 100%;
+    }
+
+    .results {
+        width: 100%;
+    }
+
+    .result {
+        width: 100%;
+        border: 1px solid black;
+        margin-top: 50px;
+        max-height: 80%;
+        overflow-y: hidden;
+    }
+
+    .result-header {
+        margin-top: 8px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        background-color: black;
+        color: white;
+        z-index: 4;
+    }
+
+    .result-image {
+        padding: 15px;
+        z-index: 1;
+        max-height: 70%;
+        overflow-y: hidden;
+    }
+
+    .result-link {
+        cursor: pointer;
+        text-decoration: none;
+        width: 100%;
+    }
+
+    .credits {
+        position: fixed;
+        right: 20px;
+        top: 20px;
+    }
+
+    .no-results {
+        padding-top: 32px;
+        width: 100%;
+        text-align: center;
+        font-weight: center;
+    }
+
+    .code {
+        color: #0366d6;
+        text-decoration: none;
+        font-weight: bold;
+        background-color: #dddddd;
+        padding: 8px;
+        border-radius: 2px;
+    }
+
+    @media screen and (max-width: 900px) {
+        .content {
+            min-width: inherit;
+            max-width: inherit;
+            width: 95%;
+        }
+
+        .credits {
+            position: absolute;
+            top: inherit;
+            right: 0px;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+        }
+    }
+    </style>
+
+    <script>
+    BACKEND = "https://relevant-xkcd-backend.herokuapp.com"
+
+    search_and_display = function() {
+        search = $("#search").val();
+
+        $.post(BACKEND + "/search", {"search": search}).done(function(data) {
+            data = JSON.parse(data)
+            
+            $("#results").empty()
+            if(data.success) {
+                $("#error").hide()
+                $("#no-results").hide();
+                if(data.results.length == 0)
+                    $("#no-results").show();
+                for(var i = 0; i < data.results.length; i++) {
+                    x = $('<a class="result-link" href="https://' + data.results[i].url + '"><div class="result"><div class="result-image"><img src="' + data.results[i].image + '"></div><div class="result-header"><h1>' + data.results[i].title + '</h2></div></div></a>')
+                    $("#results").append(x)
+                }
+            } else {
+                $("#error").show()
+                $("#error").text(data.message)
+            }
+        });
+    }
+
+    load = function() {
+        $("#search").keyup(function(event) {
+            if(event.keyCode == 13) {
+                search_and_display();
+            }
+        });
+    }
+
+    window.onload = load;
+    </script>
+
+    <body>
+        <div class="contentwrapper">
+            <div class="content">
+                <h1>Relevant XKCD Search</h1>
+                <div class="helptext" id="removable-text">
+                    You know how the old saying goes - <i>"There's always a relevant
+                    XKCD comic regardless of the situation"</i>. Here's something
+                    in that spirit.
+                </div>
+                <div id="addable" style="display: none">
+                    <hr>
+                </div>
+                <div class="search">
+                    <input type="text" name="search" id="search" class="searchbar" placeholder="Search">
+                </div>
+                <div class="no-results" id="no-results" style="display: none">
+                    No results to show. Have you done the impossible? Have you somehow found a situation <i>without</i> a relevant XKCD?
+                </div>
+                <div class="error" id="error">
+                </div>
+                <div class="results" id="results">
+                </div>
+            </div>
+        </div>
+        <div id="useless-credits-for-this-stupid-project" class="credits">
+            <a class="code" href="https://github.com/adtac/relevant-xkcd">See source on Github.</a>
+        </div>
+    </body>
+</html>
