@@ -106,7 +106,7 @@
 
     .result {
         width: 100%;
-        border: 1px solid black;
+        border: 2px solid black;
         margin-top: 50px;
         max-height: 80%;
         overflow-y: hidden;
@@ -134,8 +134,12 @@
         width: 100%;
     }
 
+    .logo {
+        cursor: pointer;
+    }
+
     .credits {
-        position: fixed;
+        position: absolute;
         right: 20px;
         top: 20px;
     }
@@ -192,7 +196,9 @@
         }
 
         .credits {
-            position: absolute;
+            position: initial;
+            padding-top: 30px;
+            padding-bottom: 30px;
             top: inherit;
             right: 0px;
             bottom: 20px;
@@ -240,6 +246,12 @@
         });
     }
 
+    load_new_url = function() {
+        history.pushState(null, null, "/?q=" + $("#search").val());
+        console.log(1)
+        search_and_display();
+    }
+
     feeling_lucky = function() {
         words = ["time", "issue", "year", "side", "people", "kind", "way", "head", "day", "house", "man", "service", "thing", "friend", "woman", "father", "life", "power", "child", "hour", "world", "game", "school", "line", "state", "end", "family", "member", "student", "law", "group", "car", "country", "city", "problem", "community", "hand", "name", "part", "president", "place", "team", "case", "minute", "week", "idea", "company", "kid", "system", "body", "REMOVE ADS", "program", "information", "question", "back", "work", "parent", "government", "face", "number", "others", "night", "level", "Mr", "office", "point", "door", "home", "health", "water", "person", "room", "art", "mother", "war", "area", "history", "money", "party", "story", "result", "fact", "change", "month", "morning", "lot", "reason", "right", "research", "study", "girl", "book", "guy", "eye", "food", "job", "moment", "word", "air", "business", "teacher"];
 
@@ -252,7 +264,7 @@
     load = function() {
         $("#search").keyup(function(event) {
             if(event.keyCode == 13) {
-                search_and_display();
+                load_new_url();
             }
         });
 
@@ -268,7 +280,7 @@
     <body>
         <div class="contentwrapper">
             <div class="content">
-                <h1>Relevant XKCD Search</h1>
+                <h1 class="logo" onclick="document.location = '/'">Relevant XKCD Search</h1>
                 <div class="helptext" id="removable-text">
                     You know how the old saying goes - <i>"There's always a relevant
                     XKCD comic regardless of the situation"</i>. Here's something
@@ -280,7 +292,7 @@
                 <div class="search">
                     <input type="text" name="search" id="search" class="searchbar" placeholder='What are you searching for?'>
                     <div class="buttons">
-                        <div class="button" onclick="search_and_display();">Search</div>
+                        <div class="button" onclick="load_new_url();">Search</div>
                         <div class="button" onclick="feeling_lucky();">I'm feeling lucky</div>
                     </div>
                 </div>
