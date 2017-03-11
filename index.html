@@ -42,7 +42,7 @@
         background-color: #888888;
     }
 
-    .contentwrapper, .search, .result-header, .result-image {
+    .contentwrapper, .result-header, .result-image {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -59,6 +59,12 @@
 
     .search, .searchbar {
         width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .search {
+        display: flex;
+        flex-direction: column-reverse;
     }
 
     .helptext {
@@ -150,6 +156,34 @@
         border-radius: 2px;
     }
 
+    .buttons {
+        display: flex;
+        width: 100%;
+    }
+
+    .button {
+        display: flex;
+        background-color: black;
+        border-radius: 2px;
+        color: white;
+        text-align: center;
+        justify-content: center;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        cursor: pointer;
+        width: 50%;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .button:hover {
+        background-color: #222222;
+    }
+
+    .search {
+        display: inline;
+    }
+
     @media screen and (max-width: 900px) {
         .content {
             min-width: inherit;
@@ -165,11 +199,23 @@
             width: 100%;
             text-align: center;
         }
+
     }
     </style>
 
     <script>
     BACKEND = "https://relevant-xkcd-backend.herokuapp.com"
+
+    function get_get_param(parameterName) {
+        var result = null, tmp = [];
+        location.search.substr(1)
+            .split("&")
+            .forEach(function (item) {
+                tmp = item.split("=");
+                if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+            });
+        return result;
+    }
 
     search_and_display = function() {
         search = $("#search").val();
@@ -194,12 +240,26 @@
         });
     }
 
+    feeling_lucky = function() {
+        words = ["time", "issue", "year", "side", "people", "kind", "way", "head", "day", "house", "man", "service", "thing", "friend", "woman", "father", "life", "power", "child", "hour", "world", "game", "school", "line", "state", "end", "family", "member", "student", "law", "group", "car", "country", "city", "problem", "community", "hand", "name", "part", "president", "place", "team", "case", "minute", "week", "idea", "company", "kid", "system", "body", "REMOVE ADS", "program", "information", "question", "back", "work", "parent", "government", "face", "number", "others", "night", "level", "Mr", "office", "point", "door", "home", "health", "water", "person", "room", "art", "mother", "war", "area", "history", "money", "party", "story", "result", "fact", "change", "month", "morning", "lot", "reason", "right", "research", "study", "girl", "book", "guy", "eye", "food", "job", "moment", "word", "air", "business", "teacher"];
+
+        word = words[Math.floor(Math.random() * words.length)];
+        history.pushState(null, null, "/?q=" + word);
+        $("#search").val(word);
+        search_and_display();
+    }
+
     load = function() {
         $("#search").keyup(function(event) {
             if(event.keyCode == 13) {
                 search_and_display();
             }
         });
+
+        if(get_get_param("q") != null) {
+            $("#search").val(get_get_param("q"));
+            search_and_display();
+        }
     }
 
     window.onload = load;
@@ -218,7 +278,11 @@
                     <hr>
                 </div>
                 <div class="search">
-                    <input type="text" name="search" id="search" class="searchbar" placeholder="Search">
+                    <input type="text" name="search" id="search" class="searchbar" placeholder='What are you searching for?'>
+                    <div class="buttons">
+                        <div class="button" onclick="search_and_display();">Search</div>
+                        <div class="button" onclick="feeling_lucky();">I'm feeling lucky</div>
+                    </div>
                 </div>
                 <div class="no-results" id="no-results" style="display: none">
                     No results to show. Have you done the impossible? Have you somehow found a situation <i>without</i> a relevant XKCD?
