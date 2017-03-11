@@ -68,7 +68,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
             scores := make([]ScoreRecord, len(comics))
 
             for i, comic := range comics {
-                if comic.Number == 1190 || comic.Number == 1608 || comic.Number == 1037 || comic.Number == 1335 {
+                if comic.Number == 1190 || comic.Number == 1608 || comic.Number == 1037 || comic.Number == 1335 || comic.Number == 1663 {
                     continue
                 }
 
