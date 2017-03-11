@@ -236,7 +236,7 @@
                 if(data.results.length == 0)
                     $("#no-results").show();
                 for(var i = 0; i < data.results.length; i++) {
-                    x = $('<a title="' + data.results[i].titletext + '" class="result-link" href="https://' + data.results[i].url + '"><div class="result"><div class="result-image"><img src="' + data.results[i].image + '" style="align-self: baseline;"></div><div class="result-header"><h1>' + data.results[i].title + '</h2></div></div></a>')
+                    x = $('<a target="_blank" title="' + data.results[i].titletext + '" class="result-link" href="https://' + data.results[i].url + '"><div class="result"><div class="result-image"><img src="' + data.results[i].image + '" style="align-self: baseline;"></div><div class="result-header"><h1>' + data.results[i].title + '</h2></div></div></a>')
                     $("#results").append(x)
                 }
             } else {
