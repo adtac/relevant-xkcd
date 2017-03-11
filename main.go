@@ -14,6 +14,7 @@ import (
 type XKCDComic struct {
     Number int           `json:"number"`
     Title string         `json:"title"`
+    TitleText string     `json:"titletext"`
     TitleFields []string `json:"-"`
     URL string           `json:"url"`
     Image string         `json:"image"`

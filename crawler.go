@@ -18,6 +18,7 @@ func main() {
     type XKCDComic struct {
         Number int           `json:"number"`
         Title string         `json:"title"`
+        TitleText string     `json:"titletext"`
         TitleFields []string `json:"-"`
         URL string           `json:"url"`
         Image string         `json:"image"`
@@ -60,6 +61,13 @@ func main() {
         })
 
         fmt.Printf("#%d: %s\n%s\n", comic.Number, comic.Title, explanationURL)
+
+        index := strings.Index(comic.Text, "titletext = ")
+        if index > 0 {
+            comic.TitleText = comic.Text[index+12:]
+            comic.TitleText = comic.TitleText[:strings.Index(comic.TitleText, "}")-1]
+            fmt.Printf("[%s]\n\n", comic.TitleText);
+        }
 
         comics = append(comics, comic)
 
