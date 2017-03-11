@@ -42,7 +42,7 @@
         background-color: #888888;
     }
 
-    .contentwrapper, .result-header, .result-image {
+    .contentwrapper, .result-header {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -108,24 +108,24 @@
         width: 100%;
         border: 2px solid black;
         margin-top: 50px;
-        max-height: 80%;
+        max-height: 480px;
         overflow-y: hidden;
     }
 
     .result-header {
-        margin-top: 8px;
-        padding-top: 8px;
-        padding-bottom: 8px;
         background-color: black;
         color: white;
         z-index: 4;
+        height: 60px;
     }
 
     .result-image {
-        padding: 15px;
         z-index: 1;
-        max-height: 70%;
-        overflow-y: hidden;
+        max-height: 400px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        padding: 10px;
     }
 
     .result-link {
@@ -236,7 +236,7 @@
                 if(data.results.length == 0)
                     $("#no-results").show();
                 for(var i = 0; i < data.results.length; i++) {
-                    x = $('<a title="' + data.results[i].titletext + '" class="result-link" href="https://' + data.results[i].url + '"><div class="result"><div class="result-image"><img src="' + data.results[i].image + '"></div><div class="result-header"><h1>' + data.results[i].title + '</h2></div></div></a>')
+                    x = $('<a title="' + data.results[i].titletext + '" class="result-link" href="https://' + data.results[i].url + '"><div class="result"><div class="result-image"><img src="' + data.results[i].image + '" style="align-self: baseline;"></div><div class="result-header"><h1>' + data.results[i].title + '</h2></div></div></a>')
                     $("#results").append(x)
                 }
             } else {
