@@ -1,10 +1,19 @@
-# relevant-xkcd
+## relevant-xkcd
 
-**[See here for a live run.](https://relevant-xkcd.github.io/)**
+<p align="center">You know how the old saying goes - "There's an XKCD for that!"</p>
 
-You know how the old saying goes - *"There's always a relevant XKCD comic regardless of the situation"*.
+<p align="center"><a href="https://relevant-xkcd.github.io/">
+Check out a hosted version of the project here.
+</a></p>
 
-Inspired by this: [Relevant XKCD](http://thomaspark.co/2017/01/relevant-xkcd/).
+<p align="center"><img src="https://user-images.githubusercontent.com/7521600/31832568-1a3e39ee-b5e5-11e7-901f-b57f69e82c68.png" alt="XKCD Search Engine"></p>
+
+### What is this?
+
+This is a search engine + crawler backend for XKCD comics. There's a simple API
+to search for comics. This will search through titles, transcript, and discussion.
+The comics list is automatically refreshed in the background every 6 hours (even
+though Randall updates less frequently - every Monday, Wednesday, and Friday).
 
 ### How this works
 
@@ -12,31 +21,15 @@ The lovely folks at [ExplainXKCD](http://www.explainxkcd.com/wiki/index.php/Main
 have a detailed explanation, transcript and everything in between for every XKCD
 comic ever. Searching that is probably a good idea to get a relevant XKCD.
 
-### Dependencies
+### Installation
 
-While the server doesn't have any dependencies, the crawler depends on
-[goquery](https://github.com/PuerkitoBio/goquery). `go get` that first before
-compiling and running the crawler.
-
-### How do I run this?
-
-First get the comics metadata:
+The server is dockerized. To get an instance running on port 8080 of your host
+machine, simply do:
 
 ```bash
-$ go build crawler.go
-$ ./crawler
+$ docker pull adtac/relevant-xkcd:latest
+$ docker run -d -p 8080:8080 adtac/relevant-xkcd:latest
 ```
-
-That should download the entire list of comics (not the images, just the metadata) and store them in a binary file named `comics.bin`.
-
-Then start the server:
-
-```bash
-$ go build main.go
-$ ./main
-```
-
-This will open a web server on port 8080. You may have to change the `BACKEND` variable in the `index.html`'s javascript to point to your domain and port.
 
 ### License
 
