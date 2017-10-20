@@ -12,7 +12,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 <style>
 * {
     font-family: monospace;
-    font-size: 14px;
+    font-size: 13px;
     width: 76ch;
 }
 
@@ -33,6 +33,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
     padding-top: 4px;
 }
 </style>
+
+<title>relevant-xkcd(7): a search engine for XKCD comics</title>
 
 <div class='title'>relevant-xkcd(7)</div>
 
