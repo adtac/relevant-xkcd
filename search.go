@@ -78,5 +78,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     json, _ := json.Marshal(res)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
     fmt.Fprintf(w, "%s", string(json))
 }
