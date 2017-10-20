@@ -40,7 +40,7 @@ func crawl() {
                     }
 
                 case 3:
-                    comic.Image = "https://imgs.xkcd.com/tmp_comics/" + strings.Replace(text, " ", "_", -1)
+                    comic.Image = "https://imgs.xkcd.com/comics/" + strings.Replace(text, " ", "_", -1)
 
                 case 4:
                     comic.Date = text
