@@ -7,7 +7,6 @@ import (
     "os"
     "strconv"
     "sync"
-    "fmt"
 
     "github.com/PuerkitoBio/goquery"
 )
