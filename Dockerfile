@@ -1,7 +1,9 @@
 FROM golang:1.8.1
 
-ADD . /go/src/github.com/adtac/relevant-xkcd
+COPY . /go/src/relevant-xkcd
+WORKDIR /go/src/relevant-xkcd
 
-RUN (cd /go/src/github.com/adtac/relevant-xkcd && go get -v . && go install .)
+RUN go get -v .
+RUN go build .
 
-ENTRYPOINT /go/bin/relevant-xkcd
+ENTRYPOINT /go/src/relevant-xkcd/relevant-xkcd
