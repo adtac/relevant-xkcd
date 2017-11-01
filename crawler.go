@@ -6,6 +6,8 @@ import (
     "encoding/gob"
     "os"
     "strconv"
+    "sync"
+    "fmt"
 
     "github.com/PuerkitoBio/goquery"
 )
@@ -15,54 +17,66 @@ func crawl() {
 
     tmp_comics := make([]XKCDComic, 0)
 
+    mux := &sync.Mutex{}
+
+    var wg sync.WaitGroup
     doc.Find("tr").Each(func(i int, row *goquery.Selection) {
-        comic := XKCDComic{}
-        explanationURL := ""
+        wg.Add(1)
 
-        row.Find("td").Each(func(j int, col *goquery.Selection) {
-            text := strings.TrimSpace(col.Text())
+        go func() {
+            defer wg.Done()
 
-            switch j {
-                case 0:
-                    comic.URL = text
-                    comic.Number, _ = strconv.Atoi(text[strings.Index(text, "/")+1:])
+            comic := XKCDComic{}
+            explanationURL := ""
 
-                case 1:
-                    comic.Title = strings.TrimSpace(text[:strings.Index(text, "(create)")-1])
-                    comic.TitleFields = strings.Fields(comic.Title)
+            row.Find("td").Each(func(j int, col *goquery.Selection) {
+                text := strings.TrimSpace(col.Text())
 
-                    explanationURL, _ = col.Find("a").Attr("href")
-                    explanationURL = "http://www.explainxkcd.com" + explanationURL[:15] + "?action=edit&title=" + explanationURL[16:]
+                switch j {
+                    case 0:
+                        comic.URL = text
+                        comic.Number, _ = strconv.Atoi(text[strings.Index(text, "/")+1:])
 
-                    exp, err := goquery.NewDocument(explanationURL)
-                    if err == nil {
-                        comic.Text = exp.Find("textarea").Text()
-                    }
+                    case 1:
+                        comic.Title = strings.TrimSpace(text[:strings.Index(text, "(create)")-1])
+                        comic.TitleFields = strings.Fields(comic.Title)
 
-                case 3:
-                    comic.Image = "https://imgs.xkcd.com/comics/" + strings.Replace(text, " ", "_", -1)
+                        explanationURL, _ = col.Find("a").Attr("href")
+                        explanationURL = "http://www.explainxkcd.com" + explanationURL[:15] + "?action=edit&title=" + explanationURL[16:]
 
-                case 4:
-                    comic.Date = text
+                        exp, err := goquery.NewDocument(explanationURL)
+                        if err == nil {
+                            comic.Text = exp.Find("textarea").Text()
+                        }
+
+                    case 3:
+                        comic.Image = "https://imgs.xkcd.com/comics/" + strings.Replace(text, " ", "_", -1)
+
+                    case 4:
+                        comic.Date = text
+                }
+            })
+
+            index := strings.Index(comic.Text, "titletext = ")
+            if index > 0 {
+                comic.TitleText = comic.Text[index+12:]
+                comic.TitleText = comic.TitleText[:strings.Index(comic.TitleText, "}")-1]
             }
-        })
 
-        index := strings.Index(comic.Text, "titletext = ")
-        if index > 0 {
-            comic.TitleText = comic.Text[index+12:]
-            comic.TitleText = comic.TitleText[:strings.Index(comic.TitleText, "}")-1]
-        }
-
-        tmp_comics = append(tmp_comics, comic)
-
-        var buf bytes.Buffer
-        enc := gob.NewEncoder(&buf)
-        enc.Encode(tmp_comics)
-
-        f, _ := os.Create("comics.bin")
-        f.Write(buf.Bytes())
-        f.Close()
+            mux.Lock()
+            tmp_comics = append(tmp_comics, comic)
+            mux.Unlock()
+        }()
     })
+    wg.Wait()
+
+    var buf bytes.Buffer
+    enc := gob.NewEncoder(&buf)
+    enc.Encode(tmp_comics)
+
+    f, _ := os.Create("comics.bin")
+    f.Write(buf.Bytes())
+    f.Close()
 
     comics = tmp_comics
 }
