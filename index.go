@@ -54,7 +54,7 @@ relevant-xkcd - a search engine for XKCD comics
 <div class='content'>
 To search for the term 'velociraptors':
     <div class='item-desc example'>
-    $ curl --data 'search=velociraptors' http://adtac.pw:8000/search
+    $ curl --data 'search=velociraptors' http://xkcd.adtac.pw/search
     </div>
 </div>
 
